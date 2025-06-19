@@ -1,16 +1,18 @@
 import { z } from "zod";
 import { idSchema } from "../shared/id.interface";
 
-export enum OrderStatus {
-  PENDING = "PENDING",
-  PAID = "PAID",
-  PROCESSING = "PROCESSING",
-  SHIPPED = "SHIPPED",
-  DELIVERED = "DELIVERED",
-  CANCELLED = "CANCELLED",
-  FAILED = "FAILED",
-  REFUNDED = "REFUNDED",
-}
+export const OrderStatus = {
+  PENDING: "PENDING",
+  PAID: "PAID",
+  PROCESSING: "PROCESSING",
+  SHIPPED: "SHIPPED",
+  DELIVERED: "DELIVERED",
+  CANCELLED: "CANCELLED",
+  FAILED: "FAILED",
+  REFUNDED: "REFUNDED",
+} as const;
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 
 export const defaultOrderSchema = z.object({
   id: idSchema("Order").optional(),
