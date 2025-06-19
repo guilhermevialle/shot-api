@@ -20,10 +20,21 @@ export class NanoIdService implements IIdService {
     this._length = length;
   }
 
+  /**
+   * Generates a new ID.
+   *
+   * @returns The generated ID.
+   */
   public generate(): string {
     return nanoid(this._length);
   }
 
+  /**
+   * Validates the given ID.
+   *
+   * @param id - The ID to validate.
+   * @returns Whether the ID is valid or not
+   */
   public validate(id: string): boolean {
     return idSchema(this._length).safeParse(id).success;
   }

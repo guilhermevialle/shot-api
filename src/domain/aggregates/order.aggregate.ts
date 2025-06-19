@@ -90,6 +90,9 @@ export class Order {
   get items() {
     return [...this._items];
   }
+  get status() {
+    return this.props.status;
+  }
 
   // derived getters
   get totalPriceInCents() {
