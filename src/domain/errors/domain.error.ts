@@ -7,15 +7,13 @@ interface DomainErrorProps {
 }
 
 export class DomainError extends Error {
-  private _message: string;
-  private props: DomainErrorProps;
-
-  constructor(message: string, props: DomainErrorProps) {
-    super(message);
+  constructor(
+    private readonly _message: string,
+    private readonly _props: DomainErrorProps
+  ) {
+    super(_message);
 
     Error.captureStackTrace?.(this, this.constructor);
-    this._message = message;
-    this.props = props;
     this.name = this.constructor.name;
   }
 
@@ -24,15 +22,15 @@ export class DomainError extends Error {
   }
 
   get statusCode() {
-    return this.props.statusCode;
+    return this._props.statusCode;
   }
 
   get errorCode() {
-    return this.props.errorCode;
+    return this._props.errorCode;
   }
 
   get details() {
-    return this.props.details;
+    return this._props.details;
   }
 
   public toJSON() {
