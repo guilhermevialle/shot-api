@@ -1,5 +1,9 @@
 import { CustomerEventName } from ".";
-import { DomainEvent, DomainEventProps } from "../domain.event";
+import {
+  DomainEvent,
+  DomainEventProps,
+  DomainEventType,
+} from "../domain.event";
 
 interface CustomerCreatedDto {
   id: string;
@@ -8,6 +12,6 @@ interface CustomerCreatedDto {
 
 export class CustomerCreatedEvent extends DomainEvent<CustomerCreatedDto> {
   constructor(props: DomainEventProps<CustomerCreatedDto>) {
-    super(CustomerEventName.CREATED, props);
+    super(CustomerEventName.CREATED, DomainEventType.CUSTOMER, props);
   }
 }

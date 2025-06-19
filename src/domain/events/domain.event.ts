@@ -21,10 +21,10 @@ export type DomainEventName = CustomerEventName;
 export class DomainEvent<DataDto = any> {
   protected readonly _occurredOn = new Date();
   protected readonly _eventId = idService.generate();
-  protected _type: DomainEventType = DomainEventType.DOMAIN_EVENT;
 
   protected constructor(
     private readonly _name: DomainEventName,
+    private readonly _type: DomainEventType,
     private readonly _props: DomainEventProps<DataDto>
   ) {}
 
