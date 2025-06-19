@@ -16,9 +16,18 @@ export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 
 export const defaultOrderSchema = z.object({
   id: idSchema("Order").optional(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  status: z.nativeEnum(OrderStatus).optional(),
+  createdAt: z.date({
+    invalid_type_error: "Order created at must be a date",
+    required_error: "Order created at is required",
+  }).optional(),
+  updatedAt: z.date({
+    invalid_type_error: "Order updated at must be a date",
+    required_error: "Order updated at is required",
+  }).optional(),
+  status: z.nativeEnum(OrderStatus, {
+    invalid_type_error: "Order status must be a string",
+    required_error: "Order status is required",
+  }).optional(),
 });
 
 export const createOrderSchema = z.object({

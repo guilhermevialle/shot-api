@@ -8,9 +8,19 @@ export const defaultOrderItemSchema = z.object({
 export const createOrderItemSchema = z.object({
   orderId: idSchema("Order"),
   productId: idSchema("Product"),
-  name: z.string(),
-  quantity: z.number(),
-  unitPriceInCents: z.number(),
+  name: z.string({
+    invalid_type_error: "Product name must be a string",
+    required_error: "Product name is required",
+  }).min(3, "Product name must be at least 3 characters long")
+    .max(100, "Product name must be at most 100 characters long"),
+  quantity: z.number({
+    invalid_type_error: "Quantity must be a number",
+    required_error: "Quantity is required",
+  }).int('Quantity must be an integer').min(1, "Quantity must be at least 1"),
+  unitPriceInCents: z.number({
+    invalid_type_error: "Unit price must be a number",
+    required_error: "Unit price is required",
+  }).int('Unit price must be an integer').min(100, "Unit price must be at least 100 cents"),
 });
 
 export const restoreOrderItemSchema = defaultOrderItemSchema

@@ -1,9 +1,40 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  output   = "../src/infra/prisma/generated"
 }
 
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id       String @id @unique
+  username String
+}
+
+model Product {
+  id            String @id @unique
+  name          String
+  priceInCents  Int
+  description   String
+  stockQuantity Int
+  thumbnailUrl  String
+}
+
+model OrderItem {
+  id               String @id @unique
+  orderId          String
+  productId        String
+  name             String
+  quantity         Int
+  unitPriceInCents Int
+}
+
+model Order {
+  id         String   @id @unique
+  customerId String
+  status     String
+  createdAt  DateTime
+  updatedAt  DateTime
 }

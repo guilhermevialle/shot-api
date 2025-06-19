@@ -17,7 +17,7 @@ export const createProductSchema = z.object({
     .number({
       invalid_type_error: "Product price must be a number",
       required_error: "Product price is required",
-    })
+    }).int('Product price must be an integer')
     .min(100, "Product price must be at least 100 cents"),
   description: z
     .string({
@@ -30,7 +30,7 @@ export const createProductSchema = z.object({
     .number({
       invalid_type_error: "Product stock quantity must be a number",
       required_error: "Product stock quantity is required",
-    })
+    }).int('Product stock quantity must be an integer')
     .nonnegative({
       message: "Product stock quantity cannot be negative",
     }),
