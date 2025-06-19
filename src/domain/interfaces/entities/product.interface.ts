@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { idSchema } from "../shared/id.interface";
 
 export const defaultProductSchema = z.object({
-  id: z.string().optional(),
+  id: idSchema("Product").optional(),
 });
 
 export const createProductSchema = z.object({

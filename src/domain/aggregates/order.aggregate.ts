@@ -1,10 +1,13 @@
 import { idService } from "../config/id-service";
 import { OrderItem } from "../entities/order-item.entity";
+import { InvalidInputError } from "../errors/shared";
 import {
   CreateOrderProps,
+  createOrderSchema,
   OrderProps,
   OrderStatus,
   RestoreOrderProps,
+  restoreOrderSchema,
 } from "../interfaces/aggregates/order.interface";
 
 interface ItemProps {
@@ -29,12 +32,26 @@ export class Order {
   }
 
   static create(props: CreateOrderProps) {
+    const result = createOrderSchema.safeParse(props);
+
+    if (!result.success)
+      throw new InvalidInputError(
+        `[Order:create] ${result.error.errors[0].message}`
+      );
+
     const order = new Order({ ...props });
 
     return order;
   }
 
   static restore(props: RestoreOrderProps) {
+    const result = restoreOrderSchema.safeParse(props);
+
+    if (!result.success)
+      throw new InvalidInputError(
+        `[Order:restore] ${result.error.errors[0].message}`
+      );
+
     return new Order({ ...props });
   }
 
@@ -52,11 +69,8 @@ export class Order {
     if (this.hasItem(props.productId)) return;
 
     const item = OrderItem.create({
+      ...props,
       orderId: this.id,
-      productId: props.productId,
-      name: props.name,
-      quantity: props.quantity,
-      unitPriceInCents: props.unitPriceInCents,
     });
 
     this._items.push(item);
@@ -69,7 +83,7 @@ export class Order {
       customerId: this.customerId,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      items: [...this.items.map((item) => item.toJSON())],
+      items: this.items.map((item) => item.toJSON()),
       totalPriceInCents: this.totalPriceInCents,
     };
   }

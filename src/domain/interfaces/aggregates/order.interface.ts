@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { idSchema } from "../shared/id.interface";
 
 export enum OrderStatus {
   PENDING = "PENDING",
@@ -12,14 +13,14 @@ export enum OrderStatus {
 }
 
 export const defaultOrderSchema = z.object({
-  id: z.string().optional(),
+  id: idSchema("Order").optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
   status: z.nativeEnum(OrderStatus).optional(),
 });
 
 export const createOrderSchema = z.object({
-  customerId: z.string(),
+  customerId: idSchema("Customer"),
 });
 
 export const restoreOrderSchema = defaultOrderSchema

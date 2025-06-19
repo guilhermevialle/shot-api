@@ -1,8 +1,11 @@
 import { idService } from "../config/id-service";
+import { InvalidInputError } from "../errors/shared";
 import {
   CreateCustomerProps,
+  createCustomerSchema,
   CustomerProps,
   RestoreCustomerProps,
+  restoreCustomerSchema,
 } from "../interfaces/entities/customer.interface";
 
 export class Customer {
@@ -15,19 +18,28 @@ export class Customer {
     };
   }
 
-  static create({ username }: CreateCustomerProps) {
-    const customer = new Customer({
-      username,
-    });
+  static create(props: CreateCustomerProps) {
+    const result = createCustomerSchema.safeParse(props);
+
+    if (!result.success)
+      throw new InvalidInputError(
+        `[Customer:create] ${result.error.errors[0].message}`
+      );
+
+    const customer = new Customer(props);
 
     return customer;
   }
 
-  static restore({ id, username }: RestoreCustomerProps) {
-    return new Customer({
-      id,
-      username,
-    });
+  static restore(props: RestoreCustomerProps) {
+    const result = restoreCustomerSchema.safeParse(props);
+
+    if (!result.success)
+      throw new InvalidInputError(
+        `[Customer:restore] ${result.error.errors[0].message}`
+      );
+
+    return new Customer(props);
   }
 
   // public methods

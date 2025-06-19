@@ -1,8 +1,11 @@
 import { idService } from "../config/id-service";
+import { InvalidInputError } from "../errors/shared";
 import {
   CreateOrderItemProps,
+  createOrderItemSchema,
   OrderItemProps,
   RestoreOrderItemProps,
+  restoreOrderItemSchema,
 } from "../interfaces/entities/order-item.interface";
 
 export class OrderItem {
@@ -16,12 +19,26 @@ export class OrderItem {
   }
 
   static create(props: CreateOrderItemProps) {
+    const result = createOrderItemSchema.safeParse(props);
+
+    if (!result.success)
+      throw new InvalidInputError(
+        `[OrderItem:create] ${result.error.errors[0].message}`
+      );
+
     const orderItem = new OrderItem({ ...props });
 
     return orderItem;
   }
 
   static restore(props: RestoreOrderItemProps) {
+    const result = restoreOrderItemSchema.safeParse(props);
+
+    if (!result.success)
+      throw new InvalidInputError(
+        `[OrderItem:restore] ${result.error.errors[0].message}`
+      );
+
     return new OrderItem({ ...props });
   }
 

@@ -1,8 +1,11 @@
 import { idService } from "../config/id-service";
+import { InvalidInputError } from "../errors/shared";
 import {
   CreateProductProps,
+  createProductSchema,
   ProductProps,
   RestoreProductProps,
+  restoreProductSchema,
 } from "../interfaces/entities/product.interface";
 
 export class Product {
@@ -16,12 +19,26 @@ export class Product {
   }
 
   static create(props: CreateProductProps) {
+    const result = createProductSchema.safeParse(props);
+
+    if (!result.success)
+      throw new InvalidInputError(
+        `[Product:create] ${result.error.errors[0].message}`
+      );
+
     const product = new Product({ ...props });
 
     return product;
   }
 
   static restore(props: RestoreProductProps) {
+    const result = restoreProductSchema.safeParse(props);
+
+    if (!result.success)
+      throw new InvalidInputError(
+        `[Product:restore] ${result.error.errors[0].message}`
+      );
+
     return new Product({ ...props });
   }
 

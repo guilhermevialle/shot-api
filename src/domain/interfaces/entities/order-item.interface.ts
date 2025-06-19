@@ -1,12 +1,13 @@
 import { z } from "zod";
+import { idSchema } from "../shared/id.interface";
 
 export const defaultOrderItemSchema = z.object({
-  id: z.string().optional(),
+  id: idSchema("OrderItem").optional(),
 });
 
 export const createOrderItemSchema = z.object({
-  orderId: z.string(),
-  productId: z.string(),
+  orderId: idSchema("Order"),
+  productId: idSchema("Product"),
   name: z.string(),
   quantity: z.number(),
   unitPriceInCents: z.number(),

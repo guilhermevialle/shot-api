@@ -2,8 +2,9 @@ import { nanoid } from "nanoid";
 import { z } from "zod";
 import { IIdService } from "../interfaces/services/id-service.interface";
 
-const DEFAULT_ID_LENGTH = 21;
-const regex = /^[A-Za-z0-9_-]+$/;
+export const DEFAULT_ID_LENGTH = 21;
+export const regex = /^[A-Za-z0-9_-]+$/;
+
 export const idSchema = (length: number = DEFAULT_ID_LENGTH) =>
   z.string().length(length).regex(regex);
 
