@@ -1,22 +1,10 @@
+import { DomainEventName, DomainEventType } from ".";
 import { idService } from "../config/id-service";
-import { CustomerEventName } from "./customer-events";
 
 export interface DomainEventProps<DataDto = any> {
   aggregateId: string;
   data: DataDto;
 }
-
-export const DomainEventType = {
-  DOMAIN_EVENT: "domain-event",
-  CUSTOMER: "customer",
-  ORDER: "order",
-  ORDER_ITEM: "order-item",
-  PRODUCT: "product",
-} as const;
-
-export type DomainEventType =
-  (typeof DomainEventType)[keyof typeof DomainEventType];
-export type DomainEventName = CustomerEventName;
 
 export class DomainEvent<DataDto = any> {
   protected readonly _occurredOn = new Date();

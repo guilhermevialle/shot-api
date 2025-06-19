@@ -1,9 +1,6 @@
 import { CustomerEventName } from ".";
-import {
-  DomainEvent,
-  DomainEventProps,
-  DomainEventType,
-} from "../domain.event";
+import { DomainEventType } from "..";
+import { DomainEvent, DomainEventProps } from "../domain.event";
 
 interface CustomerCreatedDto {
   id: string;
