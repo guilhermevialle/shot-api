@@ -1,8 +1,9 @@
-import { nanoid } from "nanoid";
+import { idService } from "../config/id-service";
 import { OrderItem } from "../entities/order-item.entity";
 import {
   CreateOrderProps,
   OrderProps,
+  OrderStatus,
   RestoreOrderProps,
 } from "../interfaces/aggregates/order.interface";
 
@@ -20,9 +21,10 @@ export class Order {
   private constructor(props: OrderProps) {
     this.props = {
       ...props,
-      id: props.id ?? nanoid(),
+      id: props.id ?? idService.generate(),
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date(),
+      status: props.status ?? OrderStatus.PENDING,
     };
   }
 
@@ -45,19 +47,9 @@ export class Order {
     return this._items.some((item) => item.productId === productId);
   }
 
-  private incrementItem(productId: string, amount: number) {
-    const item = this._items.find((item) => item.productId === productId);
-
-    item?.incrementQuantity(amount);
-    this.touch();
-  }
-
   // public methods
   public addItem(props: ItemProps) {
-    if (this.hasItem(props.productId)) {
-      this.incrementItem(props.productId, props.quantity);
-      return;
-    }
+    if (this.hasItem(props.productId)) return;
 
     const item = OrderItem.create({
       orderId: this.id,

@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { idService } from "../config/id-service";
 import {
   CreateCustomerProps,
   CustomerProps,
@@ -11,7 +11,7 @@ export class Customer {
   private constructor(props: CustomerProps) {
     this.props = {
       ...props,
-      id: props.id ?? nanoid(),
+      id: props.id ?? idService.generate(),
     };
   }
 

@@ -1,9 +1,21 @@
 import { z } from "zod";
 
+export enum OrderStatus {
+  PENDING = "PENDING",
+  PAID = "PAID",
+  PROCESSING = "PROCESSING",
+  SHIPPED = "SHIPPED",
+  DELIVERED = "DELIVERED",
+  CANCELLED = "CANCELLED",
+  FAILED = "FAILED",
+  REFUNDED = "REFUNDED",
+}
+
 export const defaultOrderSchema = z.object({
   id: z.string().optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
+  status: z.nativeEnum(OrderStatus).optional(),
 });
 
 export const createOrderSchema = z.object({
