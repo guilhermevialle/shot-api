@@ -1,5 +1,7 @@
 import { idService } from "../config/id-service";
 import { InvalidInputError } from "../errors/shared";
+import { CustomerCreatedEvent } from "../events/customer-events/customer-created.event";
+import { DomainEvent } from "../events/domain.event";
 import {
   CreateCustomerProps,
   createCustomerSchema,
@@ -9,6 +11,7 @@ import {
 } from "../interfaces/entities/customer.interface";
 
 export class Customer {
+  private _events: DomainEvent[] = [];
   private props: RestoreCustomerProps;
 
   private constructor(props: CustomerProps) {
@@ -16,6 +19,10 @@ export class Customer {
       ...props,
       id: props.id ?? idService.generate(),
     };
+  }
+
+  private addEvent(event: DomainEvent) {
+    this._events.push(event);
   }
 
   static create(props: CreateCustomerProps) {
@@ -27,6 +34,16 @@ export class Customer {
       );
 
     const customer = new Customer(props);
+
+    customer.addEvent(
+      new CustomerCreatedEvent({
+        aggregateId: customer.id,
+        data: {
+          id: customer.id,
+          username: customer.username,
+        },
+      })
+    );
 
     return customer;
   }
@@ -43,6 +60,12 @@ export class Customer {
   }
 
   // public methods
+  public pullEvents() {
+    const events = this._events;
+    this._events = [];
+    return events;
+  }
+
   public toJSON() {
     return {
       id: this.id,
@@ -58,7 +81,3 @@ export class Customer {
     return this.props.username;
   }
 }
-
-Customer.create({
-  username: "John Doe",
-});
